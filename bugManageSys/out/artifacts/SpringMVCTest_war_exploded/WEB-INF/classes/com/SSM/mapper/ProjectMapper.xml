@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.SSM.mapper.ProjectMapper">
+
+    <resultMap type="project" id="projectMap">
+        <!-- 主键映射 -->
+        <id column="pro_id" property="pro_id"></id>
+        <!-- 添加映射对象 -->
+        <!--property:project类中对象的名字  -->
+        <!--javaType:该对象的类型  -->
+    </resultMap>
+
+    <resultMap id="moduleMap" type="module">
+        <id column="moduleid" property="moduleid"></id>
+    </resultMap>
+
+    <resultMap id="bugMap" type="bug">
+        <id column="bugid" property="bugid"></id>
+    </resultMap>
+
+    <!--<select id="queryAllProjects"  resultMap="projectMap">-->
+    <!--select b.*,u.role_name from bug_Project b,Project_role u where b.role_id=u.role_id-->
+    <!--</select>-->
+    <select id="queryAllProjects" resultMap="projectMap">
+        select * from project
+	</select>
+
+    <!-- 添加用户 -->
+    <insert id="addProject" parameterType="Project">
+		insert into scsx.project (`name`, `wordkey`, `description`, `date`, `manager`) values(#{name},#{wordkey},#{description},#{date},#{manager})
+	</insert>
+
+    <insert id="addModule" parameterType="Module">
+        insert into scsx.module (`modulename`, `function`, `time`, `proid`) values (#{modulename}, #{function}, #{time}, #{proid})
+    </insert>
+
+    <insert id="addBug" parameterType="bug">
+        insert into scsx.bug (`userid`, `createDate`, `processDate`, `content`, `proid`) values (#{userid},#{createDate},#{processDate},#{content},#{proid})
+    </insert>
+
+    <delete id="deleteProject" parameterType="Project">
+        delete from project
+        <where>
+            pro_id=#{pro_id}
+        </where>
+    </delete>
+
+    <update id="updateProject" parameterType="Project">
+        update project set description=#{description}, name=#{name}, wordkey=#{wordkey}, date=#{date}
+        <where>
+            pro_id=#{pro_id}
+        </where>
+    </update>
+
+    <update id="updateModule" parameterType="Module">
+        update module set modulename=#{modulename}, function=#{function}, time=#{time}
+        <where>
+            moduleid=#{moduleid}
+        </where>
+    </update>
+
+    <select id="queryModule" parameterType="Project" resultMap="moduleMap">
+        select * from module
+        <where>
+            proid=#{pro_id}
+        </where>
+    </select>
+
+    <select id="queryBug" parameterType="Project" resultMap="bugMap">
+        select * from bug
+        <where>
+            proid=#{pro_id}
+        </where>
+    </select>
+
+    <delete id="deleteBug" parameterType="Bug">
+        delete from bug
+        <where>
+            bugid=#{bugid}
+        </where>
+    </delete>
+
+    <delete id="deleteModule" parameterType="Module">
+        delete from module
+        <where>
+            moduleid=#{moduleid}
+        </where>
+    </delete>
+</mapper>
